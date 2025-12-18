@@ -1,0 +1,108 @@
+index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Online QR Code Generator</title>
+  <meta name="description" content="Generate QR codes instantly for URLs, text, email, WiFi, and more. Free, fast, no sign‑up." />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background: #020617;
+      border-radius: 16px;
+      padding: 24px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+    p {
+      font-size: 0.9rem;
+      opacity: 0.85;
+      margin-bottom: 16px;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      margin-bottom: 12px;
+      font-size: 1rem;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: #38bdf8;
+      color: #020617;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:hover {
+      opacity: 0.9;
+    }
+    canvas {
+      display: block;
+      margin: 16px auto 0;
+      background: #fff;
+      padding: 10px;
+      border-radius: 12px;
+    }
+    .download {
+      margin-top: 12px;
+      text-align: center;
+      display: none;
+    }
+    .download a {
+      color: #38bdf8;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>QR Code Generator</h1>
+    <p>Paste a URL or text to generate a QR code instantly.</p>
+
+    <input id="qrInput" type="text" placeholder="https://example.com" />
+    <button onclick="generateQR()">Generate QR Code</button>
+
+    <canvas id="qrCanvas"></canvas>
+
+    <div class="download" id="download">
+      <a id="downloadLink" download="qr-code.png">Download QR Code</a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <script>
+    function generateQR() {
+      const text = document.getElementById('qrInput').value.trim();
+      if (!text) return;
+
+      const canvas = document.getElementById('qrCanvas');
+      QRCode.toCanvas(canvas, text, { width: 220 }, function (error) {
+        if (error) console.error(error);
+        const link = document.getElementById('downloadLink');
+        link.href = canvas.toDataURL();
+        document.getElementById('download').style.display = 'block';
+      });
+    }
+  </script>
+</body>
+</html>
