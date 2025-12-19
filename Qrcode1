@@ -1,11 +1,11 @@
-index.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Free Online QR Code Generator</title>
-  <meta name="description" content="Generate QR codes instantly for URLs, text, email, WiFi, and more. Free, fast, no sign‑up." />
+  <meta name="description" content="Generate QR codes instantly for URLs, text, email, WiFi, and more. Free, fast, no sign-up." />
+
   <style>
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
@@ -56,7 +56,7 @@ index.html
       opacity: 0.9;
     }
     canvas {
-      display: block;
+      display: none;
       margin: 16px auto 0;
       background: #fff;
       padding: 10px;
@@ -72,6 +72,13 @@ index.html
       text-decoration: none;
       font-size: 0.9rem;
     }
+    .error {
+      color: #f87171;
+      font-size: 0.85rem;
+      margin-top: 10px;
+      display: none;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -80,29 +87,54 @@ index.html
     <p>Paste a URL or text to generate a QR code instantly.</p>
 
     <input id="qrInput" type="text" placeholder="https://example.com" />
-    <button onclick="generateQR()">Generate QR Code</button>
+    <button id="generateBtn">Generate QR Code</button>
 
     <canvas id="qrCanvas"></canvas>
 
     <div class="download" id="download">
       <a id="downloadLink" download="qr-code.png">Download QR Code</a>
     </div>
+
+    <div class="error" id="errorMsg">
+      Something went wrong. Please refresh and try again.
+    </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-  <script>
-    function generateQR() {
-      const text = document.getElementById('qrInput').value.trim();
-      if (!text) return;
+  <!-- QR Code library -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js" defer></script>
 
-      const canvas = document.getElementById('qrCanvas');
-      QRCode.toCanvas(canvas, text, { width: 220 }, function (error) {
-        if (error) console.error(error);
-        const link = document.getElementById('downloadLink');
-        link.href = canvas.toDataURL();
-        document.getElementById('download').style.display = 'block';
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const btn = document.getElementById("generateBtn");
+      const input = document.getElementById("qrInput");
+      const canvas = document.getElementById("qrCanvas");
+      const download = document.getElementById("download");
+      const link = document.getElementById("downloadLink");
+      const errorMsg = document.getElementById("errorMsg");
+
+      btn.addEventListener("click", () => {
+        errorMsg.style.display = "none";
+        download.style.display = "none";
+
+        const text = input.value.trim();
+        if (!text) return;
+
+        if (typeof QRCode === "undefined") {
+          errorMsg.style.display = "block";
+          return;
+        }
+
+        QRCode.toCanvas(canvas, text, { width: 220 }, (err) => {
+          if (err) {
+            errorMsg.style.display = "block";
+            return;
+          }
+          canvas.style.display = "block";
+          link.href = canvas.toDataURL("image/png");
+          download.style.display = "block";
+        });
       });
-    }
+    });
   </script>
 </body>
 </html>
