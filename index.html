@@ -4,42 +4,101 @@ index.html
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Free Online QR Code Generator</title>
-  <meta name="description" content="Generate QR codes instantly for URLs, text, email, WiFi, and more. Free, fast, no sign‑up." />
-  <meta name="description" content="Generate QR codes instantly for URLs, text, email, WiFi, and more. Free, fast, no sign-up." />
+  <title>Free QR Code Generator</title>
+  <meta name="description" content="Generate QR codes instantly. Free, fast, no sign-up." />
 
   <style>
     body {
+      margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-@@ -56,7 +56,7 @@ index.html
-      opacity: 0.9;
+      background: linear-gradient(135deg, #0f172a, #020617);
+      color: #e5e7eb;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    canvas {
-      display: block;
-      display: none;
-      margin: 16px auto 0;
-      background: #fff;
-      padding: 10px;
-@@ -72,6 +72,13 @@ index.html
-      text-decoration: none;
-      font-size: 0.9rem;
-    }
-    .error {
-      color: #f87171;
-      font-size: 0.85rem;
-      margin-top: 10px;
-      display: none;
+
+    .card {
+      background: #020617;
+      padding: 28px;
+      border-radius: 18px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 25px 50px rgba(0,0,0,.45);
       text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 1.6rem;
+    }
+
+    p {
+      margin: 0 0 18px;
+      font-size: .95rem;
+      opacity: .85;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: none;
+      font-size: 1rem;
+      margin-bottom: 12px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: #38bdf8;
+      color: #020617;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: .9;
+    }
+
+    canvas {
+      margin-top: 18px;
+      background: #fff;
+      padding: 12px;
+      border-radius: 12px;
+      display: none;
+    }
+
+    .download {
+      margin-top: 12px;
+      display: none;
+    }
+
+    .download a {
+      color: #38bdf8;
+      text-decoration: none;
+      font-size: .9rem;
+    }
+
+    footer {
+      margin-top: 14px;
+      font-size: .75rem;
+      opacity: .5;
     }
   </style>
 </head>
 <body>
-@@ -80,29 +87,54 @@ index.html
+
+  <div class="card">
+    <h1>QR Code Generator</h1>
     <p>Paste a URL or text to generate a QR code instantly.</p>
 
-    <input id="qrInput" type="text" placeholder="https://example.com" />
+    <input id="qrInput" placeholder="https://example.com" />
     <button onclick="generateQR()">Generate QR Code</button>
-    <button id="generateBtn">Generate QR Code</button>
 
     <canvas id="qrCanvas"></canvas>
 
@@ -47,57 +106,30 @@ index.html
       <a id="downloadLink" download="qr-code.png">Download QR Code</a>
     </div>
 
-    <div class="error" id="errorMsg">
-      Something went wrong. Please refresh and try again.
-    </div>
+    <footer>No tracking • No sign-up</footer>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-  <!-- QR Code library -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js" defer></script>
-
   <script>
     function generateQR() {
       const text = document.getElementById('qrInput').value.trim();
       if (!text) return;
-    document.addEventListener("DOMContentLoaded", () => {
-      const btn = document.getElementById("generateBtn");
-      const input = document.getElementById("qrInput");
-      const canvas = document.getElementById("qrCanvas");
-      const download = document.getElementById("download");
-      const link = document.getElementById("downloadLink");
-      const errorMsg = document.getElementById("errorMsg");
-
-      btn.addEventListener("click", () => {
-        errorMsg.style.display = "none";
-        download.style.display = "none";
 
       const canvas = document.getElementById('qrCanvas');
-      QRCode.toCanvas(canvas, text, { width: 220 }, function (error) {
-        if (error) console.error(error);
-        const link = document.getElementById('downloadLink');
-        link.href = canvas.toDataURL();
-        document.getElementById('download').style.display = 'block';
-        const text = input.value.trim();
-        if (!text) return;
 
-        if (typeof QRCode === "undefined") {
-          errorMsg.style.display = "block";
+      QRCode.toCanvas(canvas, text, { width: 220 }, function (error) {
+        if (error) {
+          console.error(error);
           return;
         }
-
-        QRCode.toCanvas(canvas, text, { width: 220 }, (err) => {
-          if (err) {
-            errorMsg.style.display = "block";
-            return;
-          }
-          canvas.style.display = "block";
-          link.href = canvas.toDataURL("image/png");
-          download.style.display = "block";
-        });
+        canvas.style.display = 'block';
+        const link = document.getElementById('downloadLink');
+        link.href = canvas.toDataURL("image/png");
+        document.getElementById('download').style.display = 'block';
       });
     }
-    });
   </script>
+
 </body>
 </html>
+
